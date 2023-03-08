@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 
 import 'db.dart';
-import 'list_students.dart';
+import 'list_user.dart';
 
-class AddStudent extends StatefulWidget {
-  const AddStudent({super.key});
+class AddUser extends StatefulWidget {
+  const AddUser({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _AddStudent();
+    return _AddUser();
   }
 }
 
-class _AddStudent extends State<AddStudent> {
-  TextEditingController name = TextEditingController();
-  TextEditingController rollno = TextEditingController();
-  TextEditingController address = TextEditingController();
+class _AddUser extends State<AddUser> {
+  TextEditingController fname = TextEditingController();
+  TextEditingController lname = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController mno = TextEditingController();
 
   MyDb mydb = MyDb();
 
@@ -29,32 +30,32 @@ class _AddStudent extends State<AddStudent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Student"),
+        title: const Text("Add User"),
       ),
       body: Container(
         padding: const EdgeInsets.all(30),
         child: Column(
           children: [
             TextField(
-              controller: name,
+              controller: fname,
               decoration: const InputDecoration(
                 hintText: "First Name",
               ),
             ),
             TextField(
-              controller: rollno,
+              controller: lname,
               decoration: const InputDecoration(
                 hintText: "Last Name",
               ),
             ),
             TextField(
-              controller: address,
+              controller: email,
               decoration: const InputDecoration(
                 hintText: "Email",
               ),
             ),
             TextField(
-              controller: address,
+              controller: mno,
               decoration: const InputDecoration(
                 hintText: "Mobile No",
               ),
@@ -63,15 +64,16 @@ class _AddStudent extends State<AddStudent> {
             ElevatedButton(
               onPressed: () {
                 mydb.db.rawInsert(
-                    "INSERT INTO students (name, roll_no, address) VALUES (?, ?, ?);",
-                    [name.text, rollno.text, address.text]);
+                    "INSERT INTO UserInfo (fname, lname, email, mno) VALUES (?, ?, ?, ?);",
+                    [fname.text, lname.text, email.text, mno.text]);
 
                 ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("New Student Added")));
+                    const SnackBar(content: Text("New User Added")));
 
-                name.text = "";
-                rollno.text = "";
-                address.text = "";
+                fname.text = "";
+                lname.text = "";
+                email.text = "";
+                mno.text = "";
               },
               child: const Text("Submit"),
             ),
@@ -81,7 +83,7 @@ class _AddStudent extends State<AddStudent> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const ListStudents();
+                      return const ListUser();
                     },
                   ),
                 );

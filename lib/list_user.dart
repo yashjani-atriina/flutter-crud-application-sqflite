@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'db.dart';
-import 'edit_student.dart';
+import 'edit_user.dart';
 
-class ListStudents extends StatefulWidget {
-  const ListStudents({super.key});
+class ListUser extends StatefulWidget {
+  const ListUser({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _ListStudents();
+    return _ListUser();
   }
 }
 
-class _ListStudents extends State<ListStudents> {
+class _ListUser extends State<ListUser> {
   List<Map> slist = [];
   MyDb mydb = MyDb();
 
@@ -25,7 +25,7 @@ class _ListStudents extends State<ListStudents> {
 
   getdata() {
     Future.delayed(const Duration(milliseconds: 500), () async {
-      slist = await mydb.db.rawQuery('SELECT * FROM students');
+      slist = await mydb.db.rawQuery('SELECT * FROM UserInfo');
       setState(() {});
     });
   }
@@ -34,44 +34,43 @@ class _ListStudents extends State<ListStudents> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("List of Students"),
+        title: const Text("List of User"),
       ),
       body: SingleChildScrollView(
         child: Container(
           child: slist.isEmpty
-              ? const Text("No any students to show.")
+              ? const Text("No any User to show.")
               : Column(
                   children: slist.map(
-                    (stuone) {
+                    (userone) {
                       return Card(
                         child: ListTile(
                           leading: const Icon(Icons.people),
-                          title: Text(stuone["name"]),
-                          subtitle: Text("Roll No:" +
-                              stuone["roll_no"].toString() +
-                              ", Add: " +
-                              stuone["address"]),
+                          title: Text(userone["fname"]),
+                          subtitle: Text(
+                            "${userone["lname"]}, " + userone["mno"].toString(),
+                          ),
                           trailing: Wrap(
                             children: [
                               IconButton(
                                   onPressed: () {
                                     Navigator.push(context, MaterialPageRoute(
                                         builder: (BuildContext context) {
-                                      return EditStudent(
-                                          rollno: stuone["roll_no"]);
+                                      return EditUser(mno: userone["mno"]);
                                     }));
                                   },
                                   icon: const Icon(Icons.edit)),
                               IconButton(
                                   onPressed: () async {
                                     await mydb.db.rawDelete(
-                                        "DELETE FROM students WHERE roll_no = ?",
-                                        [stuone["roll_no"]]);
+                                        "DELETE FROM UserInfo WHERE mno = ?", [
+                                      userone["mno"],
+                                    ]);
                                     print("Data Deleted");
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
                                             content:
-                                                Text("Student Data Deleted")));
+                                                Text("User's Data Deleted")));
                                     getdata();
                                   },
                                   icon: const Icon(Icons.delete,
