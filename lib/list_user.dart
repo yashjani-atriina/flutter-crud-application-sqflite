@@ -42,13 +42,15 @@ class _ListUsers extends State<ListUsers> {
               ? const Text("No any users to show.")
               : Column(
                   children: slist.map(
-                    (stuone) {
+                    (userone) {
                       return Card(
                         child: ListTile(
                           leading: const Icon(Icons.people),
-                          title: Text(stuone["fname"]),
+                          title: Text(userone["fname"]),
                           subtitle: Text(
-                              "m no:${stuone["mno"]}, Add: " + stuone["lname"]),
+                            "M.no:${userone["mno"]}\nLast Name: " +
+                                userone["lname"],
+                          ),
                           trailing: Wrap(
                             children: [
                               IconButton(
@@ -58,7 +60,7 @@ class _ListUsers extends State<ListUsers> {
                                             builder: (BuildContext context) {
                                       //setState(() {});
 
-                                      return EditUser(mno: stuone["mno"]);
+                                      return EditUser(mno: userone["mno"]);
                                     }));
                                   },
                                   icon: const Icon(Icons.edit)),
@@ -83,7 +85,7 @@ class _ListUsers extends State<ListUsers> {
                                             Navigator.pop(context);
                                             await mydb.db.rawDelete(
                                                 "DELETE FROM UserInfo WHERE mno = ?",
-                                                [stuone["mno"]]);
+                                                [userone["mno"]]);
                                             print("Data Deleted");
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
@@ -102,7 +104,7 @@ class _ListUsers extends State<ListUsers> {
                                 // onPressed: () async {
                                 //   await mydb.db.rawDelete(
                                 //       "DELETE FROM UserInfo WHERE mno = ?",
-                                //       [stuone["mno"]]);
+                                //       [userone["mno"]]);
                                 //   print("Data Deleted");
                                 //   ScaffoldMessenger.of(context).showSnackBar(
                                 //       const SnackBar(
