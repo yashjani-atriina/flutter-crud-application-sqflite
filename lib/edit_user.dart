@@ -19,6 +19,7 @@ class _EditUser extends State<EditUser> {
   TextEditingController mno = TextEditingController();
   TextEditingController lname = TextEditingController();
   TextEditingController email = TextEditingController();
+  TextEditingController dateantime = TextEditingController();
 
   MyDb mydb = MyDb();
 
@@ -33,6 +34,7 @@ class _EditUser extends State<EditUser> {
         mno.text = data["mno"].toString();
         lname.text = data["lname"];
         email.text = data["email"];
+        dateantime.text = data["dateantime"];
         setState(() {});
       } else {
         print("No any data with mno: " + widget.mno.toString());
@@ -75,6 +77,12 @@ class _EditUser extends State<EditUser> {
                 hintText: "Mobile Number",
               ),
             ),
+            TextFormField(
+              controller: dateantime,
+              decoration: const InputDecoration(
+                hintText: "Date and Time",
+              ),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -82,12 +90,21 @@ class _EditUser extends State<EditUser> {
                 }));
 
                 mydb.db.rawInsert(
-                    "UPDATE UserInfo SET fname = ?, mno = ?, lname = ?, email = ? WHERE mno = ?",
-                    [fname.text, mno.text, lname.text, email.text, widget.mno]);
+                    "UPDATE UserInfo SET fname = ?, mno = ?, lname = ?, email = ?, dateantime = ? WHERE mno = ?",
+                    [
+                      fname.text,
+                      mno.text,
+                      lname.text,
+                      email.text,
+                      dateantime.text,
+                      widget.mno
+                    ]);
 
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("User Data Updated"),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("User Data Updated"),
+                  ),
+                );
               },
               child: const Text("Update User Data"),
             ),

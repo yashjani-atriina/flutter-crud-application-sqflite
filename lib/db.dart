@@ -17,7 +17,8 @@ class MyDb {
                           fname varchar(255) not null,
                           mno int not null,
                           lname varchar(255) not null,
-                          email varchar(255) not null
+                          email varchar(255) not null,
+                          dateantime varchar(255) not null
                       );
                       
                       //create more table here

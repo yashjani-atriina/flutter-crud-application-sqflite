@@ -49,7 +49,9 @@ class _ListUsers extends State<ListUsers> {
                           title: Text(userone["fname"]),
                           subtitle: Text(
                             "M.no:${userone["mno"]}\nLast Name: " +
-                                userone["lname"],
+                                userone["lname"] +
+                                "\n" +
+                                userone["dateantime"],
                           ),
                           trailing: Wrap(
                             children: [
@@ -101,17 +103,6 @@ class _ListUsers extends State<ListUsers> {
                                     ),
                                   );
                                 },
-                                // onPressed: () async {
-                                //   await mydb.db.rawDelete(
-                                //       "DELETE FROM UserInfo WHERE mno = ?",
-                                //       [userone["mno"]]);
-                                //   print("Data Deleted");
-                                //   ScaffoldMessenger.of(context).showSnackBar(
-                                //       const SnackBar(
-                                //           content:
-                                //               Text("Student Data Deleted")));
-                                //   getdata();
-                                // },
                                 icon:
                                     const Icon(Icons.delete, color: Colors.red),
                               )
