@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'db.dart';
+import 'list_user.dart';
 
 class EditUser extends StatefulWidget {
   int mno;
   EditUser({super.key, required this.mno});
+  final GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
 
   @override
   State<StatefulWidget> createState() {
@@ -14,9 +16,9 @@ class EditUser extends StatefulWidget {
 
 class _EditUser extends State<EditUser> {
   TextEditingController fname = TextEditingController();
+  TextEditingController mno = TextEditingController();
   TextEditingController lname = TextEditingController();
   TextEditingController email = TextEditingController();
-  TextEditingController mno = TextEditingController();
 
   MyDb mydb = MyDb();
 
@@ -28,12 +30,12 @@ class _EditUser extends State<EditUser> {
       var data = await mydb.getUser(widget.mno);
       if (data != null) {
         fname.text = data["fname"];
+        mno.text = data["mno"].toString();
         lname.text = data["lname"];
         email.text = data["email"];
-        mno.text = data["mno"].toString();
         setState(() {});
       } else {
-        print("No any data with roll no: " + widget.mno.toString());
+        print("No any data with mno: " + widget.mno.toString());
       }
     });
     super.initState();
@@ -49,48 +51,45 @@ class _EditUser extends State<EditUser> {
         padding: const EdgeInsets.all(30),
         child: Column(
           children: [
-            TextField(
+            TextFormField(
               controller: fname,
               decoration: const InputDecoration(
                 hintText: "First Name",
               ),
             ),
-            TextField(
+            TextFormField(
               controller: lname,
               decoration: const InputDecoration(
-                hintText: "Last Name.",
+                hintText: "Last Name",
               ),
             ),
-            TextField(
+            TextFormField(
               controller: email,
               decoration: const InputDecoration(
-                hintText: "Email:",
+                hintText: "E-mail",
               ),
             ),
-            TextField(
+            TextFormField(
               controller: mno,
               decoration: const InputDecoration(
-                hintText: "Mobile No:",
+                hintText: "Mobile Number",
               ),
-            ),
-            const SizedBox(
-              height: 10,
             ),
             ElevatedButton(
               onPressed: () {
-                mydb.db.rawInsert(
-                  "UPDATE UserInfo SET fname = ?, lname = ?, email = ? WHERE mno = ?",
-                  [fname.text, lname.text, email.text, widget.mno],
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const ListUsers();
+                }));
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("User Data Updated"),
-                  ),
-                );
-                Navigator.of(context).pop();
+                mydb.db.rawInsert(
+                    "UPDATE UserInfo SET fname = ?, mno = ?, lname = ?, email = ? WHERE mno = ?",
+                    [fname.text, mno.text, lname.text, email.text, widget.mno]);
+
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("User Data Updated"),
+                ));
               },
-              child: const Text("Save"),
+              child: const Text("Update User Data"),
             ),
           ],
         ),
